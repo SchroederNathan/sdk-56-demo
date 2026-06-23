@@ -1,7 +1,7 @@
 import { Button, HStack, Spacer, Text } from '@expo/ui/swift-ui';
 import { buttonStyle, contentShape, shapes } from '@expo/ui/swift-ui/modifiers';
 
-import { Chevron } from '@/components/chevron';
+import { Chevron } from '@/components/list/chevron';
 import { secondaryText } from '@/styles';
 
 // `contentShape` makes the whole row (including the `Spacer` gap) hit-testable,

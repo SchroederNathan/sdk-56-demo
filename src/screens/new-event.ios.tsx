@@ -25,8 +25,8 @@ import {
 import { useState } from 'react';
 import { PlatformColor } from 'react-native';
 
-import { LinkRow } from '@/components/link-row';
-import { NEW_EVENT_HEADER_HEIGHT } from '@/components/new-event-header';
+import { LinkRow } from '@/components/list/link-row';
+import { NEW_EVENT_HEADER_HEIGHT } from '@/screens/new-event-header';
 import {
   ALERT_OPTIONS,
   ONE_HOUR_IN_MS,

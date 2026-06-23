@@ -1,8 +1,8 @@
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import { Platform, PlatformColor, useColorScheme } from 'react-native';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import { NewEventHeader } from '@/components/new-event-header';
+import { AnimatedSplashOverlay } from '@/components/splash/animated-icon';
+import { NewEventHeader } from '@/screens/new-event-header';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();

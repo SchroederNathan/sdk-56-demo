@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 
-import { ThemedText } from '@/components/themed-text';
+import { ThemedText } from '@/components/themed/themed-text';
 import { Spacing } from '@/constants/theme';
 
 // These screens render native SwiftUI / Jetpack Compose via @expo/ui, which has

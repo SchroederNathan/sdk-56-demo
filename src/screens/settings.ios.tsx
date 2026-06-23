@@ -14,8 +14,8 @@ import { buttonStyle, font } from '@expo/ui/swift-ui/modifiers';
 import { useState } from 'react';
 import { PlatformColor } from 'react-native';
 
-import { Chevron } from '@/components/chevron';
-import { LinkRow } from '@/components/link-row';
+import { Chevron } from '@/components/list/chevron';
+import { LinkRow } from '@/components/list/link-row';
 import { secondaryText } from '@/styles';
 
 const noop = () => {};
