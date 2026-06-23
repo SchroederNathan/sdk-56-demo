@@ -119,6 +119,10 @@ export default function WidgetDemoScreen() {
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <SafeAreaView edges={['bottom']} style={styles.safeArea}>
+          <ThemedText type="title" style={styles.heading}>
+            Widgets
+          </ThemedText>
+
           <View style={styles.countBlock}>
             <ThemedText type="small" themeColor="textSecondary">
               Counter
@@ -184,6 +188,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.four,
     paddingVertical: Spacing.four,
     width: '100%',
+  },
+  heading: {
+    textAlign: 'center',
   },
   countBlock: {
     alignItems: 'center',

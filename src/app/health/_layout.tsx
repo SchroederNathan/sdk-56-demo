@@ -9,6 +9,10 @@ export default function HealthTabsLayout() {
         <NativeTabs.Trigger.Icon sf="heart.fill" drawable="ic_menu_today" />
         <NativeTabs.Trigger.Label>Summary</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="my-activity">
+        <NativeTabs.Trigger.Icon sf="figure.run" drawable="ic_menu_recent_history" />
+        <NativeTabs.Trigger.Label>My Activity</NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
     </NativeTabs>
   );
 }

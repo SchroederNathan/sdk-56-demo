@@ -20,6 +20,7 @@ import {
 } from '@expo/ui/jetpack-compose';
 import {
   background,
+  clickable,
   clip,
   fillMaxSize,
   fillMaxWidth,
@@ -232,6 +233,7 @@ function FilledTonalLabel({
     <Row
       modifiers={[
         clip(Shapes.RoundedCorner(8)),
+        clickable(onPress),
         background(colors.secondaryContainer),
         padding(12, 6, 12, 6),
       ]}

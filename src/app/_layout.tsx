@@ -15,7 +15,10 @@ export default function RootLayout() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="settings" options={{ title: 'Settings' }} />
         <Stack.Screen name="health" options={{ headerShown: false }} />
-        <Stack.Screen name="widget-demo" options={{ title: 'Widgets' }} />
+        <Stack.Screen
+          name="widget-demo"
+          options={{ title: '',   }}
+        />
         <Stack.Screen
           name="new-event"
           options={{

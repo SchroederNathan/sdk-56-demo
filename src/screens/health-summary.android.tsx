@@ -23,7 +23,7 @@ import {
   weight,
   width,
 } from '@expo/ui/jetpack-compose/modifiers';
-import { type ImageSourcePropType } from 'react-native';
+import { type ImageSourcePropType, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -40,28 +40,32 @@ const BED_ICON = require('@/assets/icons/bed.xml');
 const FLAME_ICON = require('@/assets/icons/local_fire_department.xml');
 const CHEVRON_ICON = require('@/assets/icons/chevron_right.xml');
 
-const RED = '#E5484D';
-const INDIGO = '#5C6BC0';
-const ORANGE = '#FB5B2D';
+// Inactive bar fill. surfaceVariant is too close to the card color to read, so
+// use a fixed mid gray (matches the iOS systemGray feel) for clear contrast.
+const BAR_INACTIVE = '#C7C7CC';
 
-// Android counterpart of the SwiftUI Health Summary. Bar charts are rebuilt from
-// Compose Box rows; the HRV line/dot chart has no @expo/ui Compose equivalent, so
-// it is rendered as a simplified scatter (the one place the universal abstraction
-// stops — a deliberate teaching point in the demo).
+// Same warm coral -> lavender wash as the iOS Summary screen (and the Activity
+// tab), painted on the RN view behind the transparent Compose tree so the opaque
+// cards sit on the gradient.
+const SUMMARY_GRADIENT =
+  'linear-gradient(180deg, #F6A98C 0%, #F2A0AE 12%, #E0AAC9 22%, #C8BAE6 32%, rgba(242,242,247,1) 44%)';
+
+// Android counterpart of the SwiftUI Health Summary. Cards are stepped up via
+// tonal `surfaceContainer*` roles and per metric accents mapped to Material color
+// roles (so they adapt to the device theme instead of using fixed iOS hex). Bar
+// charts are rebuilt from Compose Box rows; the HRV line/dot chart has no @expo/ui
+// Compose equivalent, so it is rendered as a simplified scatter (the one place the
+// universal abstraction stops — a deliberate teaching point in the demo).
 export default function HealthSummaryScreen() {
   const colors = useMaterialColors();
   const insets = useSafeAreaInsets();
 
   return (
-    <Host style={{ flex: 1 }}>
-      <Column
-        modifiers={[
-          fillMaxSize(),
-          background(colors.background),
-          verticalScroll(),
-          padding(20, 20 + insets.top, 20, 20),
-        ]}
-        verticalArrangement={{ spacedBy: 16 }}>
+    <View style={{ experimental_backgroundImage: SUMMARY_GRADIENT, backgroundColor: colors.background, flex: 1 }}>
+      <Host style={{ flex: 1 }}>
+        <Column
+          modifiers={[fillMaxSize(), verticalScroll(), padding(20, 20 + insets.top, 20, 20)]}
+          verticalArrangement={{ spacedBy: 16 }}>
         <Row modifiers={[fillMaxWidth()]} verticalAlignment="center">
           <Text style={{ fontWeight: '700', typography: 'titleLarge' }} color={colors.onSurface}>
             Pinned
@@ -76,7 +80,7 @@ export default function HealthSummaryScreen() {
           <CardHeader
             colors={colors}
             icon={HEART_ICON}
-            tint={RED}
+            tint={colors.error}
             title="Heart Rate Variability"
             timestamp="Yesterday"
           />
@@ -88,7 +92,7 @@ export default function HealthSummaryScreen() {
               <Metric colors={colors} value={HRV_AVERAGE} unit="ms" />
             </Column>
             <Spacer modifiers={[weight(1)]} />
-            <HrvScatter colors={colors} values={HRV_VALUES} accent={RED} />
+            <HrvScatter colors={colors} values={HRV_VALUES} accent={colors.error} />
           </Row>
         </HealthCard>
 
@@ -96,7 +100,7 @@ export default function HealthSummaryScreen() {
           <CardHeader
             colors={colors}
             icon={BED_ICON}
-            tint={INDIGO}
+            tint={colors.primary}
             title="Sleep Score"
             timestamp="Today"
           />
@@ -109,11 +113,11 @@ export default function HealthSummaryScreen() {
         </HealthCard>
 
         <HealthCard colors={colors}>
-          <CardHeader colors={colors} icon={FLAME_ICON} tint={ORANGE} title="Steps" timestamp="15.21" />
+          <CardHeader colors={colors} icon={FLAME_ICON} tint={colors.primary} title="Steps" timestamp="15.21" />
           <Row modifiers={[fillMaxWidth()]} verticalAlignment="bottom">
             <Metric colors={colors} value={STEPS_TOTAL} unit="steps" />
             <Spacer modifiers={[weight(1)]} />
-            <BarChart colors={colors} values={STEPS_VALUES} accent={ORANGE} />
+            <BarChart values={STEPS_VALUES} accent={colors.primary} />
           </Row>
         </HealthCard>
 
@@ -121,24 +125,25 @@ export default function HealthSummaryScreen() {
           <CardHeader
             colors={colors}
             icon={FLAME_ICON}
-            tint={ORANGE}
+            tint={colors.primary}
             title="Walking + Running Distance"
             timestamp="15.21"
           />
           <Row modifiers={[fillMaxWidth()]} verticalAlignment="bottom">
             <Metric colors={colors} value={DISTANCE_TOTAL} unit="km" />
             <Spacer modifiers={[weight(1)]} />
-            <BarChart colors={colors} values={DISTANCE_VALUES} accent={ORANGE} />
+            <BarChart values={DISTANCE_VALUES} accent={colors.primary} />
           </Row>
         </HealthCard>
-      </Column>
-    </Host>
+        </Column>
+      </Host>
+    </View>
   );
 }
 
 function HealthCard({ children, colors }: { children: React.ReactNode; colors: MaterialColors }) {
   return (
-    <Card colors={{ containerColor: colors.surfaceContainerHigh }} modifiers={[fillMaxWidth()]}>
+    <Card colors={{ containerColor: colors.surface }} modifiers={[fillMaxWidth()]}>
       <Column
         modifiers={[fillMaxWidth(), padding(16, 18, 16, 18)]}
         verticalArrangement={{ spacedBy: 12 }}>
@@ -189,15 +194,7 @@ function Metric({ colors, unit, value }: { colors: MaterialColors; unit: string;
   );
 }
 
-function BarChart({
-  accent,
-  colors,
-  values,
-}: {
-  accent: string;
-  colors: MaterialColors;
-  values: number[];
-}) {
+function BarChart({ accent, values }: { accent: string; values: number[] }) {
   const max = Math.max(...values);
   const last = values.length - 1;
 
@@ -213,7 +210,7 @@ function BarChart({
             weight(1),
             height(Math.max(4, Math.round((value / max) * 60))),
             clip(Shapes.RoundedCorner(2)),
-            background(index === last ? accent : colors.surfaceVariant),
+            background(index === last ? accent : BAR_INACTIVE),
           ]}
         />
       ))}
